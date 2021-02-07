@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Copyright (c) 2021 LaRoccx LLC <http://www.laroccx.com>
+
+# require root privileges
+require_root_privileges() {
+	if [ $(id -u) != 0 ]; then
+		logger -i "Error: $(basename $0 .sh) must be run as root!"
+		echo "Error: $(basename $0 .sh) must be run as root!"
+		exit 1
+	fi
+};
+
+require_root_privileges
+
+main() {
+	# install personalize-ubuntu-desktop command
+	cp -b -S .bak -v $PWD/personalize-ubuntu-desktop.sh \
+		/usr/local/bin/personalize-ubuntu-desktop
+
+	chown root:root /usr/local/bin/personalize-ubuntu-desktop
+	chmod 0755 /usr/local/bin/personalize-ubuntu-desktop
+};
+
+main "$@"
+
