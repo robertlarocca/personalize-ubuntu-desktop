@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021 LaRoccx LLC <http://www.laroccx.com>
 
-script_version='2.6.4'
+script_version='2.6.8'
 script_release='devel'	# options devel, beta, release
 
 # Require root privileges to execute this script
@@ -45,6 +45,7 @@ hide_applications() {
 		/usr/share/applications/nm-connection-editor.desktop \
 		/usr/share/applications/software-properties-drivers.desktop \
 		/usr/share/applications/software-properties-gtk.desktop \
+		/usr/share/applications/sonicwall-netextender.desktop \
 		/usr/share/applications/update-manager.desktop \
 		/usr/share/applications/via.desktop \
 		/usr/share/applications/vim.desktop \
@@ -80,7 +81,8 @@ rename_applications() {
 	sed -E -i s/'Name=Power Statistics'/'Name=Power Stats'/g /usr/share/applications/org.gnome.PowerStats.desktop
 	sed -E -i s/'Name=Rhythmbox'/'Name=Music'/g /usr/share/applications/rhythmbox.desktop
 	sed -E -i s/'Name=Startup Applications'/'Name=Startup Apps'/g /usr/share/applications/gnome-session-properties.desktop
-	sed -E -i s/'Name=Ubuntu Software'/'Name=Software'/g /var/lib/snapd/desktop/applications/snap-store_ubuntu-software.desktop
+	sed -E -i s/'Name=Ubuntu Software'/'Name=Snap Store'/g /var/lib/snapd/desktop/applications/snap-store_ubuntu-software.desktop
+	sed -E -i s/'Name=Ubuntu Software'/'Name=Software'/g /usr/share/applications/org.gnome.Software.desktop
 	sed -E -i s/'Name=VMware Workstation'/'Name=Workstation'/g /usr/share/applications/vmware-workstation.desktop
 	sed -E -i s/'Name=Web'/'Name=Browser'/g /usr/share/applications/org.gnome.Epiphany.desktop
 };
@@ -94,6 +96,7 @@ icon_applications() {
 	sed -E -i s/'^Icon=.*'/'Icon=jockey'/g /usr/share/applications/vmware-workstation.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=mail-app'/g /usr/share/applications/org.gnome.Geary.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=messaging-app'/g /var/lib/snapd/desktop/applications/discord_discord.desktop
+	sed -E -i s/'^Icon=.*'/'Icon=snap-store'/g /var/lib/snapd/desktop/applications/snap-store_ubuntu-software.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=software-store'/g /usr/share/applications/org.gnome.Software.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=web-browser'/g /usr/share/applications/google-chrome.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=web-browser'/g /var/lib/snapd/desktop/applications/chromium_chromium.desktop
