@@ -8,7 +8,7 @@ script_release='devel'	# options devel, beta, release
 # Require root privileges to execute this script
 require_root_privileges() {
 	if [ "$(id -u)" != 0 ]; then
-		echo 'Error: $(basename -s .sh $0) must be run as root!' 1>&2
+		echo "Error: $(basename -s .sh $0) must be run as root!" 1>&2
 		exit 1
 	fi
 };
