@@ -2,13 +2,13 @@
 
 # Copyright (c) 2021 LaRoccx LLC <http://www.laroccx.com>
 
-script_version='2.6.8'
+script_version='2.6.9'
 script_release='devel'	# options devel, beta, release
 
 # Require root privileges to execute this script
 require_root_privileges() {
 	if [ "$(id -u)" != 0 ]; then
-		echo 'This script must be run as root!' 1>&2
+		echo 'Error: $(basename -s .sh $0) must be run as root!' 1>&2
 		exit 1
 	fi
 };
