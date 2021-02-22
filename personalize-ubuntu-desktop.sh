@@ -96,6 +96,7 @@ icon_applications() {
 	sed -E -i s/'^Icon=.*'/'Icon=jockey'/g /usr/share/applications/vmware-workstation.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=mail-app'/g /usr/share/applications/org.gnome.Geary.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=messaging-app'/g /var/lib/snapd/desktop/applications/discord_discord.desktop
+	sed -E -i s/'^Icon=.*'/'Icon=messaging-app'/g /var/lib/snapd/desktop/applications/fractal_fractal.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=snap-store'/g /var/lib/snapd/desktop/applications/snap-store_ubuntu-software.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=software-store'/g /usr/share/applications/org.gnome.Software.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=web-browser'/g /usr/share/applications/google-chrome.desktop
