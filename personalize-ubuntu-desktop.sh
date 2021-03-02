@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021 LaRoccx LLC <http://www.laroccx.com>
 
-script_version='2.6.9'
+script_version='2.6.10'
 script_release='devel'	# options devel, beta, release
 
 # Require root privileges to execute this script
@@ -83,6 +83,7 @@ rename_applications() {
 	sed -E -i s/'Name=Startup Applications'/'Name=Startup Apps'/g /usr/share/applications/gnome-session-properties.desktop
 	sed -E -i s/'Name=Ubuntu Software'/'Name=Snap Store'/g /var/lib/snapd/desktop/applications/snap-store_ubuntu-software.desktop
 	sed -E -i s/'Name=Ubuntu Software'/'Name=Software'/g /usr/share/applications/org.gnome.Software.desktop
+	sed -E -i s/'Name=Visual Studio Code'/'Name=Code'/g /usr/share/applications/code.desktop
 	sed -E -i s/'Name=VMware Workstation'/'Name=Workstation'/g /usr/share/applications/vmware-workstation.desktop
 	sed -E -i s/'Name=Web'/'Name=Browser'/g /usr/share/applications/org.gnome.Epiphany.desktop
 };
