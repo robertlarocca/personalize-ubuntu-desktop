@@ -139,7 +139,7 @@ require_system_restart() {
 			;;
 		*)
 			echo '*** System restart required ***' 1>&2
-			exit 1
+			exit 0
 			;;
 	esac
 };
@@ -198,6 +198,14 @@ main() {
 			add_startup_wmclass
 			edit_startup_wmclass
 			require_system_restart
+			;;
+		-D | --dpkg)
+			require_root_privileges
+			hide_applications
+			rename_applications 2> /dev/null
+			icon_applications 2> /dev/null
+			edit_gsettings
+			exit 0
 			;;
 		-h | --hide)
 			require_root_privileges
