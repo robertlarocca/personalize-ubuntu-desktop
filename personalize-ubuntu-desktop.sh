@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021 LaRoccx LLC <http://www.laroccx.com>
 
-script_version='2.6.10'
+script_version='2.6.12'
 script_release='devel'	# options devel, beta, release
 
 # Require root privileges to execute this script
@@ -100,8 +100,8 @@ icon_applications() {
 	sed -E -i s/'^Icon=.*'/'Icon=messaging-app'/g /var/lib/snapd/desktop/applications/fractal_fractal.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=snap-store'/g /var/lib/snapd/desktop/applications/snap-store_ubuntu-software.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=software-store'/g /usr/share/applications/org.gnome.Software.desktop
-	sed -E -i s/'^Icon=.*'/'Icon=/usr/share/icons/custom/code.svg'/g /usr/share/applications/code.desktop
-	sed -E -i s/'^Icon=.*'/'Icon=/usr/share/icons/custom/sublime-text.svg'/g /usr/share/applications/sublime_text.desktop
+	sed -E -i s/'^Icon=.*'/'Icon=\/usr\/share\/icons\/custom\/code.svg'/g /usr/share/applications/code.desktop
+	sed -E -i s/'^Icon=.*'/'Icon=\/usr\/share\/icons\/custom\/sublime-text.svg'/g /usr/share/applications/sublime_text.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=web-browser'/g /usr/share/applications/google-chrome.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=web-browser'/g /var/lib/snapd/desktop/applications/chromium_chromium.desktop
 };

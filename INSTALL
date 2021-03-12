@@ -14,6 +14,9 @@ require_root_privileges() {
 require_root_privileges
 
 main() {
+	# install custom icons
+	cp -r -v $PWD/custom /usr/share/icons/
+	
 	# install personalize-ubuntu-desktop command
 	cp -b -S .bak -v $PWD/personalize-ubuntu-desktop.sh \
 		/usr/local/bin/personalize-ubuntu-desktop
