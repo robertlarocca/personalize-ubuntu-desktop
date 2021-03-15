@@ -35,7 +35,6 @@ install_packages() {
 hide_applications() {
 	echo 'Hiding applications...'
 	for desktop_file in \
-		/snap/powershell/current/meta/gui/powershell.desktop \
 		/usr/share/applications/byobu.desktop \
 		/usr/share/applications/gnome-language-selector.desktop \
 		/usr/share/applications/htop.desktop \
@@ -51,7 +50,8 @@ hide_applications() {
 		/usr/share/applications/via.desktop \
 		/usr/share/applications/vim.desktop \
 		/usr/share/applications/vmware-netcfg.desktop \
-		/usr/share/applications/vmware-player.desktop
+		/usr/share/applications/vmware-player.desktop \
+		/var/lib/snapd/desktop/applications/powershell_powershell.desktop
 	do
 		if [[ "$(grep --count NoDisplay=true $desktop_file 2> /dev/null)" == "0" ]]; then
 			echo 'NoDisplay=true' >> $desktop_file
