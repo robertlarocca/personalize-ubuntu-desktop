@@ -35,6 +35,7 @@ install_packages() {
 hide_applications() {
 	echo 'Hiding applications...'
 	for desktop_file in \
+		/snap/powershell/current/meta/gui/powershell.desktop \
 		/usr/share/applications/byobu.desktop \
 		/usr/share/applications/gnome-language-selector.desktop \
 		/usr/share/applications/htop.desktop \
