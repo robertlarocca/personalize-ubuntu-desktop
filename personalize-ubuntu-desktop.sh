@@ -2,8 +2,8 @@
 
 # Copyright (c) 2021 LaRoccx LLC <http://www.laroccx.com>
 
-script_version='2.6.13'
-script_release='devel' # options devel, beta, release
+script_version='2.6.14'
+script_release='release' # options devel, beta, release
 
 # Require root privileges to execute this script
 require_root_privileges() {
@@ -100,6 +100,7 @@ icon_applications() {
 	sed -E -i s/'^Icon=.*'/'Icon=jockey'/g /usr/share/applications/vmware-player.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=jockey'/g /usr/share/applications/vmware-workstation.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=mail-app'/g /usr/share/applications/org.gnome.Geary.desktop
+	sed -E -i s/'^Icon=.*'/'Icon=messaging-app'/g /usr/share/applications/element-desktop.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=messaging-app'/g /var/lib/snapd/desktop/applications/discord_discord.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=messaging-app'/g /var/lib/snapd/desktop/applications/fractal_fractal.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=snap-store'/g /var/lib/snapd/desktop/applications/snap-store_ubuntu-software.desktop
