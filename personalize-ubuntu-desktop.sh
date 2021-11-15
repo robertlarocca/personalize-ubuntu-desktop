@@ -2,7 +2,7 @@
 
 # Copyright (c) 2021 LaRoccx LLC <http://www.laroccx.com>
 
-script_version='2.6.14'
+script_version='2.7.2'
 script_release='release' # options devel, beta, release
 
 # Require root privileges to execute this script
@@ -16,16 +16,12 @@ require_root_privileges() {
 install_packages() {
 	echo 'Managing packages...'
 	rm -f /etc/apt/sources.list.d/*dell*
-	apt --yes autoclean
+	apt --yes clean
 	apt --yes update
 	apt --yes upgrade
 	apt --yes full-upgrade
 	apt --yes install \
-		cockpit cockpit-bridge cockpit-dashboard cockpit-networkmanager \
-		cockpit-packagekit cockpit-pcp cockpit-storaged cockpit-system \
-		cockpit-ws gnome-tweak-tool smbclient tasksel tlp-config
-	apt --yes purge \
-		firefox epiphany-browser
+		git byobu htop net-tools dnsutils smbclient tasksel \
 	apt --yes autoremove
 	snap refresh
 	fwupdmgr --force refresh
@@ -37,9 +33,11 @@ hide_applications() {
 	for desktop_file in \
 		/usr/share/applications/byobu.desktop \
 		/usr/share/applications/gnome-language-selector.desktop \
+		/usr/share/applications/org.gnome.Software.desktop \
 		/usr/share/applications/htop.desktop \
 		/usr/share/applications/icedtea-netx-javaws.desktop \
 		/usr/share/applications/im-config.desktop \
+		/usr/share/applications/info.desktop \
 		/usr/share/applications/itweb-settings.desktop \
 		/usr/share/applications/mutt.desktop \
 		/usr/share/applications/nm-connection-editor.desktop \
@@ -82,7 +80,7 @@ rename_applications() {
 	sed -E -i s/'Name=Power Statistics'/'Name=Power Stats'/g /usr/share/applications/org.gnome.PowerStats.desktop
 	sed -E -i s/'Name=Rhythmbox'/'Name=Music'/g /usr/share/applications/rhythmbox.desktop
 	sed -E -i s/'Name=Startup Applications'/'Name=Startup Apps'/g /usr/share/applications/gnome-session-properties.desktop
-	sed -E -i s/'Name=Ubuntu Software'/'Name=Snap Store'/g /var/lib/snapd/desktop/applications/snap-store_ubuntu-software.desktop
+	sed -E -i s/'Name=Ubuntu Software'/'Name=Software'/g /var/lib/snapd/desktop/applications/snap-store_ubuntu-software.desktop
 	sed -E -i s/'Name=Ubuntu Software'/'Name=Software'/g /usr/share/applications/org.gnome.Software.desktop
 	sed -E -i s/'Name=Visual Studio Code'/'Name=Code'/g /usr/share/applications/code.desktop
 	sed -E -i s/'Name=VMware Workstation'/'Name=Workstation'/g /usr/share/applications/vmware-workstation.desktop
@@ -101,9 +99,8 @@ icon_applications() {
 	sed -E -i s/'^Icon=.*'/'Icon=jockey'/g /usr/share/applications/vmware-workstation.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=mail-app'/g /usr/share/applications/org.gnome.Geary.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=messaging-app'/g /usr/share/applications/element-desktop.desktop
-	sed -E -i s/'^Icon=.*'/'Icon=messaging-app'/g /var/lib/snapd/desktop/applications/discord_discord.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=messaging-app'/g /var/lib/snapd/desktop/applications/fractal_fractal.desktop
-	sed -E -i s/'^Icon=.*'/'Icon=snap-store'/g /var/lib/snapd/desktop/applications/snap-store_ubuntu-software.desktop
+	sed -E -i s/'^Icon=.*'/'Icon=software-store'/g /var/lib/snapd/desktop/applications/snap-store_ubuntu-software.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=software-store'/g /usr/share/applications/org.gnome.Software.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=web-browser'/g /usr/share/applications/google-chrome.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=web-browser'/g /var/lib/snapd/desktop/applications/chromium_chromium.desktop
@@ -131,8 +128,7 @@ edit_gsettings() {
 
 require_system_restart() {
 	touch /var/run/reboot-required
-	echo && read -p "Do you want to restart? [Y/n] " user_input_selection
-	echo
+	echo && read -p "Do you want to restart? [Y/n] " user_input_selection && echo
 	case "$user_input_selection" in
 	[Yy] | [Yy][Ee][Ss])
 		shutdown --reboot now
@@ -207,7 +203,6 @@ main() {
 		hide_applications
 		rename_applications 2>/dev/null
 		icon_applications 2>/dev/null
-		edit_gsettings
 		exit 0
 		;;
 	-h | --hide)
