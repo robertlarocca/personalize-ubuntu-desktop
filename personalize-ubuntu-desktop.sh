@@ -67,7 +67,7 @@ rename_applications() {
 	sed -E -i s/'Name=Disks'/'Name=Disk Utility'/g /usr/share/applications/org.gnome.DiskUtility.desktop
 	sed -E -i s/'Name=Document Viewer'/'Name=Preview'/g /usr/share/applications/org.gnome.Evince.desktop
 	sed -E -i s/'Name=Empathy'/'Name=Messages'/g /usr/share/applications/empathy.desktop
-	sed -E -i s/'Name=Evolution'/'Mail=Mail'/g /usr/share/applications/org.gnome.Evolution.desktop
+	sed -E -i s/'^Name=.*'/'Name=Mail'/g /usr/share/applications/org.gnome.Evolution.desktop
 	sed -E -i s/'Name=Geary'/'Name=Mail'/g /usr/share/applications/org.gnome.Geary.desktop
 	sed -E -i s/'Name=Google Chrome'/'Name=Chrome'/g /usr/share/applications/google-chrome.desktop
 	sed -E -i s/'Name=LibreOffice Base'/'Name=Base'/g /usr/share/applications/libreoffice-base.desktop
