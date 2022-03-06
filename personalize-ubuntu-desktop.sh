@@ -2,13 +2,14 @@
 
 # Copyright (c) 2021 LaRoccx LLC <http://www.laroccx.com>
 
-script_version='2.7.2'
+script_version='2.7.8'
 script_release='release' # options devel, beta, release
 
-# Require root privileges to execute this script
+# require root privileges
 require_root_privileges() {
-	if [ "$UID" != 0 ]; then
-		echo "Error: $(basename -s .sh $0) must be run as root!" 1>&2
+	if [ "$UID" != "0" ]; then
+		logger -i "Error: $(basename "$0") must be run as root!"
+		echo "Error: $(basename "$0") must be run as root!"
 		exit 1
 	fi
 }
@@ -16,14 +17,14 @@ require_root_privileges() {
 install_packages() {
 	echo 'Managing packages...'
 	rm -f /etc/apt/sources.list.d/*dell*
-	apt --yes clean
-	apt --yes update
+	apt clean
+	apt autoclean
+	apt update
 	apt --yes upgrade
 	apt --yes full-upgrade
 	apt --yes install \
 		git byobu htop net-tools dnsutils smbclient tasksel \
-	apt --yes autoremove
-	snap refresh
+		snap refresh
 	fwupdmgr --force refresh
 	fwupdmgr update
 }
@@ -33,7 +34,6 @@ hide_applications() {
 	for desktop_file in \
 		/usr/share/applications/byobu.desktop \
 		/usr/share/applications/gnome-language-selector.desktop \
-		/usr/share/applications/org.gnome.Software.desktop \
 		/usr/share/applications/htop.desktop \
 		/usr/share/applications/icedtea-netx-javaws.desktop \
 		/usr/share/applications/im-config.desktop \
@@ -41,6 +41,7 @@ hide_applications() {
 		/usr/share/applications/itweb-settings.desktop \
 		/usr/share/applications/mutt.desktop \
 		/usr/share/applications/nm-connection-editor.desktop \
+		/usr/share/applications/org.gnome.Software.desktop \
 		/usr/share/applications/software-properties-drivers.desktop \
 		/usr/share/applications/software-properties-gtk.desktop \
 		/usr/share/applications/sonicwall-netextender.desktop \
@@ -49,8 +50,7 @@ hide_applications() {
 		/usr/share/applications/vim.desktop \
 		/usr/share/applications/vmware-netcfg.desktop \
 		/usr/share/applications/vmware-player.desktop \
-		/var/lib/snapd/desktop/applications/powershell_powershell.desktop;
-	do
+		/var/lib/snapd/desktop/applications/powershell_powershell.desktop; do
 		if [[ "$(grep --count NoDisplay=true $desktop_file 2>/dev/null)" == "0" ]]; then
 			echo 'NoDisplay=true' >>$desktop_file
 			echo "$(basename $desktop_file) is now hidden."
@@ -67,12 +67,14 @@ rename_applications() {
 	sed -E -i s/'Name=Disks'/'Name=Disk Utility'/g /usr/share/applications/org.gnome.DiskUtility.desktop
 	sed -E -i s/'Name=Document Viewer'/'Name=Preview'/g /usr/share/applications/org.gnome.Evince.desktop
 	sed -E -i s/'Name=Empathy'/'Name=Messages'/g /usr/share/applications/empathy.desktop
-	sed -E -i s/'^Name=.*'/'Name=Mail'/g /usr/share/applications/org.gnome.Evolution.desktop
+	sed -E -i s/'Name=Evolution'/'Name=Mail'/g /usr/share/applications/org.gnome.Evolution.desktop
 	sed -E -i s/'Name=Geary'/'Name=Mail'/g /usr/share/applications/org.gnome.Geary.desktop
 	sed -E -i s/'Name=Google Chrome'/'Name=Chrome'/g /usr/share/applications/google-chrome.desktop
 	sed -E -i s/'Name=LibreOffice Base'/'Name=Base'/g /usr/share/applications/libreoffice-base.desktop
 	sed -E -i s/'Name=LibreOffice Calc'/'Name=Calc'/g /usr/share/applications/libreoffice-calc.desktop
+	sed -E -i s/'Name=LibreOffice Draw'/'Name=Draw'/g /usr/share/applications/libreoffice-draw.desktop
 	sed -E -i s/'Name=LibreOffice Impress'/'Name=Impress'/g /usr/share/applications/libreoffice-impress.desktop
+	sed -E -i s/'Name=LibreOffice Math'/'Name=Math'/g /usr/share/applications/libreoffice-math.desktop
 	sed -E -i s/'Name=LibreOffice Writer'/'Name=Writer'/g /usr/share/applications/libreoffice-writer.desktop
 	sed -E -i s/'Name=Microsoft Teams - Preview'/'Name=Teams'/g /usr/share/applications/teams.desktop
 	sed -E -i s/'Name=Passwords and Keys'/'Name=Keyring'/g /usr/share/applications/org.gnome.seahorse.Application.desktop
@@ -80,8 +82,8 @@ rename_applications() {
 	sed -E -i s/'Name=Power Statistics'/'Name=Power Stats'/g /usr/share/applications/org.gnome.PowerStats.desktop
 	sed -E -i s/'Name=Rhythmbox'/'Name=Music'/g /usr/share/applications/rhythmbox.desktop
 	sed -E -i s/'Name=Startup Applications'/'Name=Startup Apps'/g /usr/share/applications/gnome-session-properties.desktop
-	sed -E -i s/'Name=Ubuntu Software'/'Name=Software'/g /var/lib/snapd/desktop/applications/snap-store_ubuntu-software.desktop
 	sed -E -i s/'Name=Ubuntu Software'/'Name=Software'/g /usr/share/applications/org.gnome.Software.desktop
+	sed -E -i s/'Name=Ubuntu Software'/'Name=Software'/g /var/lib/snapd/desktop/applications/snap-store_ubuntu-software.desktop
 	sed -E -i s/'Name=Visual Studio Code'/'Name=Code'/g /usr/share/applications/code.desktop
 	sed -E -i s/'Name=VMware Workstation'/'Name=Workstation'/g /usr/share/applications/vmware-workstation.desktop
 	sed -E -i s/'Name=Web'/'Name=Browser'/g /usr/share/applications/org.gnome.Epiphany.desktop
@@ -89,8 +91,9 @@ rename_applications() {
 
 icon_applications() {
 	echo 'Changing application icons...'
-	sed -E -i s/'^Icon=.*'/'Icon=\/usr\/share\/icons\/custom\/code.svg'/g /usr/share/applications/code.desktop
-	sed -E -i s/'^Icon=.*'/'Icon=\/usr\/share\/icons\/custom\/sublime-text.svg'/g /usr/share/applications/sublime_text.desktop
+	sed -E -i s/'^Icon=.*'/'Icon=org.gnome.gedit'/g /usr/share/applications/code.desktop
+	# sed -E -i s_'^Icon=.*'_'Icon=/usr/share/icons/custom/code.svg'_g /usr/share/applications/code.desktop
+	sed -E -i s_'^Icon=.*'_'Icon=/usr/share/icons/custom/sublime-text.svg'_g /usr/share/applications/sublime_text.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=cheese'/g /usr/share/applications/teams.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=games-app'/g /usr/share/applications/org.gnome.Games.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=gnome-books'/g /usr/share/applications/org.gnome.Books.desktop
@@ -100,8 +103,8 @@ icon_applications() {
 	sed -E -i s/'^Icon=.*'/'Icon=mail-app'/g /usr/share/applications/org.gnome.Geary.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=messaging-app'/g /usr/share/applications/element-desktop.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=messaging-app'/g /var/lib/snapd/desktop/applications/fractal_fractal.desktop
-	sed -E -i s/'^Icon=.*'/'Icon=software-store'/g /var/lib/snapd/desktop/applications/snap-store_ubuntu-software.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=software-store'/g /usr/share/applications/org.gnome.Software.desktop
+	sed -E -i s/'^Icon=.*'/'Icon=software-store'/g /var/lib/snapd/desktop/applications/snap-store_ubuntu-software.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=web-browser'/g /usr/share/applications/google-chrome.desktop
 	sed -E -i s/'^Icon=.*'/'Icon=web-browser'/g /var/lib/snapd/desktop/applications/chromium_chromium.desktop
 }
@@ -247,3 +250,5 @@ main() {
 }
 
 main "$1"
+
+# vi: syntax=sh ts=4 noexpandtab

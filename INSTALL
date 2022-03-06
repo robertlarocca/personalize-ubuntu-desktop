@@ -9,21 +9,33 @@ require_root_privileges() {
 		echo "Error: $(basename $0 .sh) must be run as root!"
 		exit 1
 	fi
-};
+}
 
 require_root_privileges
 
 main() {
 	# install custom icons
 	cp -r -v $PWD/custom /usr/share/icons/
-	
+
 	# install personalize-ubuntu-desktop command
 	cp -b -S .bak -v $PWD/personalize-ubuntu-desktop.sh \
 		/usr/local/bin/personalize-ubuntu-desktop
 
 	chown root:root /usr/local/bin/personalize-ubuntu-desktop
 	chmod 0755 /usr/local/bin/personalize-ubuntu-desktop
-};
+
+	# configure hook to run after a package is installed or updated
+	cat <<-'EOF_XYZ' >/etc/apt/apt.conf.d/98personalize-ubuntu-desktop
+		// Personalize Ubuntu after packages are installed or updated
+		DPkg::Post-Invoke {
+			"/usr/bin/test -e /usr/local/bin/personalize-ubuntu-desktop && /usr/local/bin/personalize-ubuntu-desktop --dpkg";
+		};
+	EOF_XYZ
+
+	chown root:root /etc/apt/apt.conf.d/98personalize-ubuntu-desktop
+	chmod 0644 /etc/apt/apt.conf.d/98personalize-ubuntu-desktop
+}
 
 main "$@"
 
+# vi: syntax=sh ts=4 noexpandtab
