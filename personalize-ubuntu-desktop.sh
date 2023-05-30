@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# Copyright (c) 2021 LaRoccx LLC <http://www.laroccx.com>
+# Copyright (c) 2023 LaRoccx LLC <http://www.laroccx.com>
 
 script_version='2.7.8'
 script_release='release' # options devel, beta, release
 
-# require root privileges
+# Require root privileges
 require_root_privileges() {
 	if [ "$UID" != "0" ]; then
-		logger -i "Error: $(basename "$0") must be run as root!"
+		# logger -i "Error: $(basename "$0") must be run as root!"
 		echo "Error: $(basename "$0") must be run as root!"
 		exit 1
 	fi
@@ -23,8 +23,14 @@ install_packages() {
 	apt --yes upgrade
 	apt --yes full-upgrade
 	apt --yes install \
-		git byobu htop net-tools dnsutils smbclient tasksel \
-		snap refresh
+		byobu \
+		dnsutils \
+		git \
+		htop \
+		net-tools \
+		smbclient \
+		tasksel \
+	snap refresh
 	fwupdmgr --force refresh
 	fwupdmgr update
 }

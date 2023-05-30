@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Copyright (c) 2021 LaRoccx LLC <http://www.laroccx.com>
+# Copyright (c) 2023 LaRoccx LLC <http://www.laroccx.com>
 
-# require root privileges
+# Require root privileges
 require_root_privileges() {
 	if [ "$UID" != 0 ]; then
-		logger -i "Error: $(basename $0 .sh) must be run as root!"
+		# logger -i "Error: $(basename $0 .sh) must be run as root!"
 		echo "Error: $(basename $0 .sh) must be run as root!"
 		exit 1
 	fi
@@ -13,29 +13,21 @@ require_root_privileges() {
 
 require_root_privileges
 
-main() {
-	# install custom icons
-	cp -r -v $PWD/custom /usr/share/icons/
+	sudo cp -r -v $PWD/custom /usr/share/icons/
+	sudo cp -b -S .bak -v $PWD/personalize-ubuntu-desktop.sh /usr/local/bin/personalize-ubuntu-desktop
 
-	# install personalize-ubuntu-desktop command
-	cp -b -S .bak -v $PWD/personalize-ubuntu-desktop.sh \
-		/usr/local/bin/personalize-ubuntu-desktop
+	sudo chown root:root /usr/local/bin/personalize-ubuntu-desktop
+	sudo chmod 0755 /usr/local/bin/personalize-ubuntu-desktop
 
-	chown root:root /usr/local/bin/personalize-ubuntu-desktop
-	chmod 0755 /usr/local/bin/personalize-ubuntu-desktop
-
-	# configure hook to run after a package is installed or updated
-	cat <<-'EOF_XYZ' >/etc/apt/apt.conf.d/98personalize-ubuntu-desktop
-		// Personalize Ubuntu after packages are installed or updated
-		DPkg::Post-Invoke {
-			"/usr/bin/test -e /usr/local/bin/personalize-ubuntu-desktop && /usr/local/bin/personalize-ubuntu-desktop --dpkg";
-		};
+	# Configure hook to run after a package is installed or updated
+	cat <<-'EOF_XYZ' | sudo tee /etc/apt/apt.conf.d/98personalize-ubuntu-desktop
+	// Personalize Ubuntu after packages are installed or updated
+	DPkg::Post-Invoke {
+	    "/usr/bin/test -e /usr/local/bin/personalize-ubuntu-desktop && /usr/local/bin/personalize-ubuntu-desktop --dpkg";
+	}
 	EOF_XYZ
 
-	chown root:root /etc/apt/apt.conf.d/98personalize-ubuntu-desktop
-	chmod 0644 /etc/apt/apt.conf.d/98personalize-ubuntu-desktop
-}
+	sudo chown root:root /etc/apt/apt.conf.d/98personalize-ubuntu-desktop
+	sudo chmod 0644 /etc/apt/apt.conf.d/98personalize-ubuntu-desktop
 
-main "$@"
-
-# vi: syntax=sh ts=4 noexpandtab
+# vi: syntax=sh ts=2 noexpandtab
